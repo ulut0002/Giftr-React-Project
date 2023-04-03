@@ -1,0 +1,19 @@
+.userItemList{
+
+    margin:0 10rem;
+    list-style-type: none;
+    background-color: rgb(255, 255, 255);
+}
+
+.people_container{
+    background-color: rgb(233, 233, 233);
+    min-height: 80vh;
+}
+
+.person-id{
+    color: red;
+}
+.person-id button{
+    color: blue;
+margin:0.5rem;
+}
