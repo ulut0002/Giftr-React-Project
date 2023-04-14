@@ -1,23 +1,35 @@
-import React from 'react'
-import './Nav.css'
-import Login from '../Login/Login'
-import useSessionStorage from '../../hooks/UseSessionStorage';
-import { getToken } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import {useToken} from '../../context/LoginContext';
+import { useState } from "react";
+import "./Nav.css";
+import Login from "../Login/Login";
+import useSessionStorage from "../../hooks/UseSessionStorage";
+import { Button, getToken } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useToken } from "../../context/LoginContext";
 export default function Nav() {
+  const [token, setToken] = useToken();
 
-  //const [token, setToken] = useSessionStorage();
-//console.log(token)
- // setToken(getToken);
+  useEffect(() => {}, []);
 
- const [token, setToken] = useToken();
-console.log(token);
+  function handleLogoutClick() {
+    console.log("logout");
+    setToken(null);
+  }
+
+  function handleLoginClick() {
+    console.log("login");
+
+    const redirect = `http://localhost:5173/login/`;
+    const renderURL = `https://api-final-project.onrender.com/auth/google?redirect_url=${redirect}`;
+    location.href = renderURL;
+  }
+
   return (
-    
-    <div className='mainNav'>
-<Login/>
-
-    </div>
-  )
+    <nav className="mainNav">
+      {token ? (
+        <Button onClick={handleLogoutClick}>Log out</Button>
+      ) : (
+        <Button onClick={handleLoginClick}>Login</Button>
+      )}
+    </nav>
+  );
 }
