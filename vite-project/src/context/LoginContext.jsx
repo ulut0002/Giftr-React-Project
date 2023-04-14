@@ -4,7 +4,7 @@ import useSessionStorage from "../hooks/UseSessionStorage";
 const LoginContext = createContext();
 
 function LoginProvider(props) {
-  const [token, setToken] = useSessionStorage("giftr-session-storage", []);
+  const [token, setToken] = useSessionStorage("giftr-session-storage",null);
   return (
     <LoginContext.Provider
       value={[token, setToken]}

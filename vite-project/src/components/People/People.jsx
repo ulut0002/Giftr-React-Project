@@ -1,9 +1,9 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Outlet,useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './People.css';
-import { EditIcon, PlusSquareIcon } from '@chakra-ui/icons';
-import EditPeople from './EditPeople';
+
+import PeopleList from './PeopleList';
 
 export default function People() {
   const { uid } = useParams();
@@ -18,36 +18,28 @@ export default function People() {
       .catch(console.error);
   }, []);
 
-  //const user = users.find((u) => u.uid === uid);
-
-
-
-  function editPeople(id) {
-    console.log(`edit people with person ${id}`);
-    return <Link to={`/people/${id}/edit`} />;
-  } 
-
-
-
-  const listItem = users.map((person) => (
-    <li className="person-id" key={person.id}>
-      {person.first_name}
-      {person.date_of_birth}
-
-
-      <button onClick={() => editPeople(person.uid)}>
-        <EditIcon />
-      </button>
-      <button onClick={() => editGift(person.uid)}>
-        <PlusSquareIcon />
-      </button>
-    </li>
+  const user = users.find((u) => u.uid === uid);
+  const listItem = users.map((user) => (
+<PeopleList key={user.uid} user={user} />
   ));
 
   return (
     <div className="people_container">
       <h2>People</h2>
-      <ul className="userItemList">{listItem}</ul>
+
+      <ul className="userItemList">
+            <h3>User List</h3>
+            {users.length > 0 ? (
+              users.map((user) => <PeopleList key={user.uid} user={user} />)
+            ) : (
+              <li>No detail found</li>
+            )}
+          </ul>
+
     </div>
   );
 }
+
+
+
+

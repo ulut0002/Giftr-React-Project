@@ -5,12 +5,13 @@ import { useState, useEffect } from "react";
 
 function useSessionStorage(key, initialState) {
   const [state, setState] = useState(() => {
-    const storedValue = sessionStorage.getItem(key);
+    const storedValue = localStorage.getItem(key);
+    //return storedValue ? (storedValue) : initialState;
     return storedValue ? JSON.parse(storedValue) : initialState;
   });
 
   useEffect(() => {
-    sessionStorage.setItem(key, JSON.stringify(state));
+    localStorage.setItem(key, JSON.stringify(state));
   }, [state]);
   return [state, setState];
 }
