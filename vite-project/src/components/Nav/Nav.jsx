@@ -1,8 +1,6 @@
 import { useState } from "react";
 import "./Nav.css";
-import Login from "../Login/Login";
-import useSessionStorage from "../../hooks/UseSessionStorage";
-import { Button, getToken } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useToken } from "../../context/LoginContext";
 export default function Nav() {
