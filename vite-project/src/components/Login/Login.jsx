@@ -13,7 +13,7 @@ console.log(token);
 
 
   function doLogin() {
-    const redirect = `http://localhost:5174/login/`;
+    const redirect = `http://localhost:5173/login/`;
     const renderURL = `https://api-final-project.onrender.com/auth/google?redirect_url=${redirect}`;
     location.href = renderURL;
   }
