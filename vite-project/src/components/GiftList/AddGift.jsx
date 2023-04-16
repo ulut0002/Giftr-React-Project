@@ -10,20 +10,22 @@ import {
 } from '@chakra-ui/react';
 import { useRef } from 'react';
 import { useToken } from '../../context/LoginContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function AddPeople() {
+function AddGift() {
   const nameRef = useRef('');
-  const dobRef = useRef('');
+  const urlRef = useRef('');
+  const storeRef = useRef('');
   const [token, setToken] = useToken();
   const navigate = useNavigate();
   const [isError, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const { uid } = useParams();
 
-  function addUser() {
-    //sending request to server
+  function addGift() {
+    console.log('add gift');
     const request = new Request(
-      `https://api-final-project.onrender.com/api/people`,
+      `https://api-final-project.onrender.com/api/people/${uid}/gifts`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,7 +34,8 @@ export default function AddPeople() {
         method: 'POST',
         body: JSON.stringify({
           name: nameRef.current.value,
-          dateOfBirth: dobRef.current.value,
+          url: urlRef.current.value,
+          store: storeRef.current.value,
         }),
       }
     );
@@ -49,11 +52,11 @@ export default function AddPeople() {
           throw new Error('');
         }
         setLoading(false);
-        navigate('/people');
+        navigate(`/people/${uid}/gifts`);
       })
       .catch((error) => {
         setLoading(false);
-        setError(error.message ? error.message : 'Person could not be added');
+        setError(error.message ? error.message : 'Gift could not be added');
       });
   }
 
@@ -68,15 +71,20 @@ export default function AddPeople() {
         <Input type="text" ref={nameRef} />
       </FormControl>
       <FormControl>
-        <FormLabel>Date of Birth</FormLabel>
-        <Input type="date" ref={dobRef} />
+        <FormLabel>Store</FormLabel>
+        <Input type="text" ref={storeRef} />
+      </FormControl>
+      <FormControl>
+        <FormLabel>URL</FormLabel>
+        <Input type="url" ref={urlRef} />
       </FormControl>
 
-      <Button onClick={addUser}>Save</Button>
+      <Button onClick={addGift}>Save</Button>
 
-      <Link href="/people">
+      <Link href={`/people/${uid}/gifts`}>
         <Button>Cancel</Button>
       </Link>
     </div>
   );
 }
+export default AddGift;

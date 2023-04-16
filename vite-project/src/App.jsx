@@ -11,6 +11,7 @@ import Login from './components/Login/Login';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Nav from './components/Nav/Nav';
+import AddGift from './components/GiftList/AddGift';
 function App() {
   return (
     <div className="App">
@@ -23,7 +24,8 @@ function App() {
         <Route path="/people" element={<People />} />
         <Route path="/people/add" element={<AddPeople />} />
         <Route path="/people/:uid/edit" element={<PeopleDetail />} />
-        <Route path="/giftlist" element={<GiftList />} />
+        <Route path="/people/:uid/gifts" element={<GiftList />} />
+        <Route path="/people/:uid/gifts/add" element={<AddGift />} />
       </Routes>
     </div>
   );
