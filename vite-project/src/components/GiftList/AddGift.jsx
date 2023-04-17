@@ -23,22 +23,18 @@ function AddGift() {
   const { uid } = useParams();
 
   function addGift() {
-    console.log('add gift');
-    const request = new Request(
-      `https://api-final-project.onrender.com/api/people/${uid}/gifts`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          name: nameRef.current.value,
-          url: urlRef.current.value,
-          store: storeRef.current.value,
-        }),
-      }
-    );
+    const request = new Request(`${import.meta.env.VITE_BASEURL}${uid}/gifts`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        name: nameRef.current.value,
+        url: urlRef.current.value,
+        store: storeRef.current.value,
+      }),
+    });
     setLoading(true);
     fetch(request)
       .then((res) => {

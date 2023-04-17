@@ -22,20 +22,17 @@ export default function AddPeople() {
 
   function addUser() {
     //sending request to server
-    const request = new Request(
-      `https://api-final-project.onrender.com/api/people`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          name: nameRef.current.value,
-          dateOfBirth: dobRef.current.value,
-        }),
-      }
-    );
+    const request = new Request(`${import.meta.env.VITE_BASEURL}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        name: nameRef.current.value,
+        dateOfBirth: dobRef.current.value,
+      }),
+    });
     setLoading(true);
     fetch(request)
       .then((res) => {

@@ -12,7 +12,10 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Nav from './components/Nav/Nav';
 import AddGift from './components/GiftList/AddGift';
+import GiftDetail from './components/GiftList/GiftDetail';
 function App() {
+  console.log(import.meta.env.VITE_SOME_KEY);
+  console.log(import.meta.env.VITE_DB_PASSWORD);
   return (
     <div className="App">
       <Header />
@@ -26,6 +29,10 @@ function App() {
         <Route path="/people/:uid/edit" element={<PeopleDetail />} />
         <Route path="/people/:uid/gifts" element={<GiftList />} />
         <Route path="/people/:uid/gifts/add" element={<AddGift />} />
+        <Route
+          path="/people/:uid/gifts/:giftId/edit"
+          element={<GiftDetail />}
+        />
       </Routes>
     </div>
   );

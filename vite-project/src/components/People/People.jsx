@@ -14,16 +14,13 @@ export default function People() {
   useEffect(() => {
     if (token) {
       //sending request
-      const request = new Request(
-        'https://api-final-project.onrender.com/api/people',
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          method: 'GET',
-        }
-      );
+      const request = new Request(`${import.meta.env.VITE_BASEURL}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'GET',
+      });
 
       fetch(request)
         .then((res) => res.json())

@@ -19,7 +19,7 @@ export default function GiftList() {
     if (token && uid) {
       //sending request
       const request = new Request(
-        `https://api-final-project.onrender.com/api/people/${uid}/gifts`,
+        `${import.meta.env.VITE_BASEURL}${uid}/gifts`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

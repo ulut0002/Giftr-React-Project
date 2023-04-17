@@ -1,58 +1,96 @@
 import React from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
+import { useRef } from 'react';
 import { useToken } from '../../context/LoginContext';
 
 import { Link } from 'react-router-dom';
 import { AiOutlineSave, AiOutlineDelete, AiOutlineClose } from 'react-icons/ai';
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  CircularProgress,
+  CircularProgressLabel,
+} from '@chakra-ui/react';
 
 export default function PeopleDetail() {
   const { uid } = useParams();
   const navigate = useNavigate();
   //const [user, setUser] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(null);
   const [isError, setError] = useState('');
   const [token, setToken] = useToken();
   const [isLoading, setLoading] = useState(true);
+  const nameRef = useRef(null);
+  const dobRef = useRef(null);
+
+  const [name, setName] = useState('');
+
   //sending request
   useEffect(() => {
     if (token) {
       //sending request
-      const request = new Request(
-        `https://api-final-project.onrender.com/api/people/${uid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          method: 'GET',
-        }
-      );
+      const request = new Request(`${import.meta.env.VITE_BASEURL}/${uid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'GET',
+      });
 
       setLoading(true);
 
       fetch(request)
         .then((res) => res.json())
         .then((users) => {
-          if (!users || !users.data || !users.data[0])
-            throw new Error('custom error');
+          console.log(users);
+
+          const user = users.data[0];
+          if (!user) throw new Error('custom error');
+          setUsers(user.data);
+
+          if (nameRef.current) {
+            nameRef.current.value = user.name;
+            setName(user.name);
+          }
+
           setLoading(false);
-          setUsers(users.data[0]);
         })
         .catch((isError) => {
           setLoading(false);
+          console.log('isError', isError.message);
           setError('custom text');
         });
     }
-  }, []);
+  }, [nameRef, nameRef.current, name]);
   function saveUser() {
-    //1.do post fetch
-
-    //2.if it fail - display error message
-    console.log('save!');
+    const request = new Request(`${import.meta.env.VITE_BASEURL}/${uid}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        name: nameRef.current.value,
+        dateOfBirth: dobRef.current.value,
+      }),
+    });
+    fetch(request)
+      .then((res) => res.json())
+      .then((users) => {
+        //console.log('test -users', users);
+        if (!users || !users.data) throw new Error('custom error');
+        setLoading(false);
+        navigate(`/people`);
+      })
+      .catch((isError) => {
+        setLoading(false);
+        setError('custom text');
+      });
   }
   function deleteUser() {
     const request = new Request(
@@ -80,7 +118,6 @@ export default function PeopleDetail() {
 
     //2.if it fail - display error message
   }
-  console.log('iserror', isError);
 
   if (isLoading) return <CircularProgress isIndeterminate color="green.300" />;
 
@@ -90,8 +127,14 @@ export default function PeopleDetail() {
       <h1>people detail</h1>
 
       <ul className="peopleList">
-        {users.name}
-        {users.dateOfBirth}
+        <FormControl>
+          <FormLabel>Name</FormLabel>
+          <Input type="text" ref={nameRef} />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Date of Birth</FormLabel>
+          <Input type="date" ref={dobRef} />
+        </FormControl>
 
         <button onClick={saveUser}>
           <AiOutlineSave />
