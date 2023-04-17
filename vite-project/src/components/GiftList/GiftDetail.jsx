@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useToken } from '../../context/LoginContext';
 import { Link } from 'react-router-dom';
 import { AiOutlineSave, AiOutlineDelete, AiOutlineClose } from 'react-icons/ai';
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -22,9 +22,58 @@ export default function GiftDetail() {
   const [isError, setError] = useState('');
   const [isLoading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const nameRef = useRef('');
-  const storeRef = useRef('');
-  const urlRef = useRef('');
+  const nameRef = useRef(null);
+  const storeRef = useRef(null);
+  const urlRef = useRef(null);
+
+  function useHookWithRefCallback(nameRefParam, urlRefParam, storeRefParam) {
+    const ref = useRef(null);
+    const setRef = useCallback((node) => {
+      if (ref.current) {
+        // Make sure to cleanup any events/references added to the last instance
+      }
+
+      if (node) {
+        // Check if a node is actually passed. Otherwise node would be null.
+        // You can now do what you need to, addEventListeners, measure, etc.
+
+        if (token) {
+          //sending request
+          const request = new Request(
+            `${import.meta.env.VITE_BASEURL}/${uid}/gifts/${giftId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              method: 'GET',
+            }
+          );
+          fetch(request)
+            .then((res) => res.json())
+            .then((users) => {
+              const user = users.data[0];
+              if (!user) throw new Error('custom error');
+              node.value = user.name;
+              //yyyy-MM-dd".
+
+              nameRefParam.current.value = user.name;
+              urlRefParam.current.value = user.url;
+              storeRefParam.current.value = user.store;
+            })
+            .catch((isError) => {
+              console.log('isError', isError.message);
+            });
+        }
+      }
+
+      // Save a reference to the node
+      ref.current = node;
+    }, []);
+
+    return [setRef];
+  }
+
   useEffect(() => {
     if (token) {
       //sending request
@@ -91,9 +140,12 @@ export default function GiftDetail() {
       });
   }
 
+  const [ref] = useHookWithRefCallback(nameRef, urlRef, storeRef);
+
   return (
     <div>
       <h1>gift detail</h1>
+      <div ref={ref}></div>
 
       <ul className="giftList">
         <FormControl>
