@@ -1,15 +1,16 @@
 import React from 'react';
 import { Outlet, useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import './People.css';
 import { useToken } from '../../context/LoginContext';
-
+import { Container, UnorderedList, Center, Box } from '@chakra-ui/react';
 import PeopleList from './PeopleList';
-
+import { Heading, Button } from '@chakra-ui/react';
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 export default function People() {
   const { uid } = useParams();
   const [users, setUsers] = useState([]);
   const [token, setToken] = useToken();
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     if (token) {
@@ -26,10 +27,19 @@ export default function People() {
         .then((res) => res.json())
         .then((users) => {
           //console.log(request)
+          setLoading(false);
+
           setUsers(users.data);
           console.log(users);
         })
-        .catch(console.error);
+        .catch((error) => {
+          setLoading(false);
+          setError(
+            error.message
+              ? error.message
+              : 'An error happened during fetch. Try again later'
+          );
+        });
     }
   }, []);
 
@@ -39,23 +49,34 @@ export default function People() {
   )); */
 
   if (token) {
+    if (isLoading) {
+      return <CircularProgress isIndeterminate color="green.300" />;
+    }
+
     return (
-      <div className="people_container">
-        <h2>People</h2>
+      <Container className="container">
+        <Box className="title">
+          <Center>
+            <Heading className="heading" as="h3">
+              User List
+            </Heading>
+          </Center>
 
-        <Link to={`/people/add`}>
-          <button>Add</button>
-        </Link>
+          <Center>
+            <Link className="add-btn " to={`/people/add`}>
+              <Button colorScheme="telegram">Add</Button>
+            </Link>
+          </Center>
+        </Box>
 
-        <ul className="userItemList">
-          <h3>User List</h3>
+        <UnorderedList className="List ">
           {users.length > 0 ? (
             users.map((user) => <PeopleList key={user._id} user={user} />)
           ) : (
             <li>No detail found</li>
           )}
-        </ul>
-      </div>
+        </UnorderedList>
+      </Container>
     );
   } else {
     return <div>Please login</div>;

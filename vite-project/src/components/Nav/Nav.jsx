@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Nav.css';
+import { Box, Image, Link, Text } from '@chakra-ui/react';
 import {
   Button,
   Container,
@@ -29,26 +30,24 @@ export default function Nav() {
   }
 
   return (
-    <Container>
-      <Flex as="nav" alignItems="center">
-        <Heading as="h1">Giftr</Heading>
-        <Spacer />
-        <HStack>
-          {token ? (
-            <Button onClick={handleLogoutClick} colorScheme="purple">
-              Log out
-            </Button>
-          ) : (
-            <Button onClick={handleLoginClick} colorScheme="purple">
-              Login
-            </Button>
-          )}
-        </HStack>
-      </Flex>
+    <Container className="container">
+      <Box p={4} display={{ md: 'flex' }}>
+        <Flex as="nav" alignItems="center">
+          <Heading as="h1">Giftr</Heading>
+          <Spacer />
+          <HStack>
+            {token ? (
+              <Button onClick={handleLogoutClick} colorScheme="teal">
+                Log out
+              </Button>
+            ) : (
+              <Button onClick={handleLoginClick} colorScheme="teal">
+                Login
+              </Button>
+            )}
+          </HStack>
+        </Flex>
+      </Box>
     </Container>
   );
 }
-
-// <nav className="mainNav">
-//
-// </nav>
