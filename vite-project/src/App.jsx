@@ -18,7 +18,6 @@ function App() {
   console.log(import.meta.env.VITE_DB_PASSWORD);
   return (
     <div className="App">
-      <Header />
       <Nav />
 
       <Routes>
