@@ -58,6 +58,15 @@ export default function GiftList() {
     }
   }, []);
 
+  function deleteGiftItem(id) {
+    const copy = [...gifts];
+    const idx = copy.findIndex((gift) => gift._id == id);
+    if (idx >= 0) {
+      copy.splice(idx, 1);
+    }
+    setGifts(copy);
+  }
+
   if (isLoading) {
     return <CircularProgress isIndeterminate color="green.300" />;
   }
@@ -76,7 +85,7 @@ export default function GiftList() {
         <ul>
           {gifts.map((gift) => (
             <li key={gift._id}>
-              <GiftListItem gift={gift} />
+              <GiftListItem gift={gift} deleteGiftItem={deleteGiftItem} />
             </li>
           ))}
         </ul>

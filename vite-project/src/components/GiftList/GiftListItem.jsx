@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-function GiftListItem({ gift }) {
+function GiftListItem({ gift, deleteGiftItem }) {
   const { uid } = useParams();
   const [token, setToken] = useToken();
   const navigate = useNavigate();
@@ -46,7 +46,9 @@ function GiftListItem({ gift }) {
         return res.json();
       })
       .then((users) => {
-        window.location.reload();
+        // window.location.reload();
+        //console.log('param', gift._id);
+        deleteGiftItem(gift._id);
       })
       .catch((isError) => {
         console.log('error', isError);
