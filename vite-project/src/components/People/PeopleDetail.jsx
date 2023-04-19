@@ -237,8 +237,6 @@ export default function PeopleDetail() {
                 <Text ml={1}>Save</Text>
               </Button>
 
-              <Box>{deleteItemDialog()}</Box>
-
               <Link href="/people">
                 <Button>
                   <AiOutlineClose />
@@ -252,7 +250,7 @@ export default function PeopleDetail() {
     </Container>
   );
 }
-
+//<Box>{deleteItemDialog()}</Box>
 // <Button colorScheme="red" onClick={deleteUser}>
 // <AiOutlineDelete />
 // <Text ml={1}>Delete</Text>
