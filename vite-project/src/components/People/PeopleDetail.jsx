@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRef, useCallback } from 'react';
 import { useToken } from '../../context/LoginContext';
-// import { DateTime } from 'luxon';
 import { formatDateTime } from '../Util/Util';
 
 import { AiOutlineSave, AiOutlineDelete, AiOutlineClose } from 'react-icons/ai';
@@ -20,22 +19,17 @@ import {
   Button,
   CircularProgress,
   Link,
-  CircularProgressLabel,
-  useDisclosure,
 } from '@chakra-ui/react';
 
 export default function PeopleDetail() {
   const { uid } = useParams();
   const navigate = useNavigate();
-  //const [user, setUser] = useState(null);
   const [users, setUsers] = useState(null);
   const [isError, setError] = useState('');
   const [token, setToken] = useToken();
   const [isLoading, setLoading] = useState(true);
   const nameRef = useRef(null);
   const dobRef = useRef(null);
-
-  const [name, setName] = useState('');
 
   function deleteItemDialog() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -82,17 +76,10 @@ export default function PeopleDetail() {
     const ref = useRef(null);
     const setRef = useCallback((node) => {
       if (ref.current) {
-        // Make sure to cleanup any events/references added to the last instance
       }
 
       if (node) {
-        // Check if a node is actually passed. Otherwise node would be null.
-        // You can now do what you need to, addEventListeners, measure, etc.
-        console.log('param1', nameRefParam);
-        console.log('param2', dobRefParam);
-
         if (token) {
-          //sending request
           const request = new Request(
             `${import.meta.env.VITE_BASEURL}/${uid}`,
             {
@@ -104,23 +91,18 @@ export default function PeopleDetail() {
             }
           );
           fetch(request)
-            .then((res) => res.json())
+            .then((res) => {
+              if (!res.ok) throw new Error('custom error');
+              return res.json();
+            })
             .then((users) => {
               const user = users.data[0];
               if (!user) throw new Error('custom error');
               node.value = user.name;
-              //yyyy-MM-dd".
-
               nameRefParam.current.value = user.name;
-              console.log('date', user.name, user.dateOfBirth);
 
               try {
                 const outputDate = formatDateTime(user.dateOfBirth);
-                // const test = '2023-04-01T00:00:00.000Z';
-                // const parsedDate =
-                //   DateTime.fromISO(test).setZone('America/New_York');
-
-                // const outputDate = parsedDate.toFormat('yyyy-MM-dd');
                 dobRefParam.current.value = outputDate;
               } catch (error) {}
             })
@@ -130,17 +112,14 @@ export default function PeopleDetail() {
         }
       }
 
-      // Save a reference to the node
       ref.current = node;
     }, []);
 
     return [setRef];
   }
 
-  //sending request
   useEffect(() => {
     if (token) {
-      //sending request
       const request = new Request(`${import.meta.env.VITE_BASEURL}/${uid}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -157,13 +136,11 @@ export default function PeopleDetail() {
           return res.json();
         })
         .then((users) => {
-          console.log(users);
-
           const user = users.data[0];
           if (!user) throw new Error('custom error');
 
           setUsers(user);
-          console.log('user-data', user);
+
           setLoading(false);
         })
         .catch((isError) => {
@@ -186,9 +163,11 @@ export default function PeopleDetail() {
       }),
     });
     fetch(request)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new error('error');
+        return res.json();
+      })
       .then((users) => {
-        //console.log('test -users', users);
         if (!users || !users.data) {
           throw new Error('custom error');
         }
@@ -216,15 +195,12 @@ export default function PeopleDetail() {
       .then((res) => res.json())
       .then((users) => {
         if (!users.data) throw new Error('throw error not found');
-        console.log(users.data);
-        //setUsers(users.data[0]);
+
         navigate('/people');
       })
       .catch((isError) => {
         setError('custom text');
       });
-
-    //2.if it fail - display error message
   }
 
   const [ref] = useHookWithRefCallback(nameRef, dobRef);
@@ -275,8 +251,6 @@ export default function PeopleDetail() {
       </div>
     </Container>
   );
-
-  // rest of the component code
 }
 
 // <Button colorScheme="red" onClick={deleteUser}>

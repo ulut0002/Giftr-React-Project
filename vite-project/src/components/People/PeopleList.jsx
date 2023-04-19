@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { EditIcon, PlusSquareIcon } from '@chakra-ui/icons';
+import { EditIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { useToken } from '../../context/LoginContext';
 import { AiFillDelete, AiFillGift, AiOutlineDelete } from 'react-icons/ai';
-import { DateTime } from 'luxon';
 import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import { formatDateTime } from '../Util/Util';
 import {
@@ -14,18 +13,8 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from '@chakra-ui/react';
-import {
-  Button,
-  ListItem,
-  Flex,
-  Text,
-  TableContainer,
-  Table,
-  Thead,
-} from '@chakra-ui/react';
-import { Spacer, Box } from '@chakra-ui/react';
+import { Button, ListItem, Text } from '@chakra-ui/react';
 export default function PeopleList({ user, deletePerson, setListError }) {
-  const [error, setError] = useState('');
   const [token, setToken] = useToken();
 
   function deleteUser() {
@@ -126,7 +115,6 @@ export default function PeopleList({ user, deletePerson, setListError }) {
           </GridItem>
 
           <GridItem colStart={2} colEnd={3} rowStart={1} rowEnd={3}>
-            {/* People Edit icon */}
             <Link to={`/people/${user._id}/edit`}>
               <Button colorScheme="blue">
                 <EditIcon />
@@ -136,8 +124,6 @@ export default function PeopleList({ user, deletePerson, setListError }) {
           </GridItem>
 
           <GridItem colStart={3} colEnd={4} rowStart={1} rowEnd={3}>
-            {/* Gift Edit icon */}
-
             <Link to={`/people/${user._id}/gifts`}>
               <Button colorScheme="blue">
                 <AiFillGift /> <Text ml={1}>Gift List</Text>
@@ -145,10 +131,7 @@ export default function PeopleList({ user, deletePerson, setListError }) {
             </Link>
           </GridItem>
 
-          <GridItem colStart={4} colEnd={5} rowStart={1} rowEnd={3}>
-            {/* Gift Edit icon */}
-            {deleteItemDialog()}
-          </GridItem>
+          <GridItem colStart={4} colEnd={5} rowStart={1} rowEnd={3}></GridItem>
         </Grid>
       </ListItem>
     );
@@ -156,13 +139,4 @@ export default function PeopleList({ user, deletePerson, setListError }) {
     return <div>Please login</div>;
   }
 }
-
-/* {Gift Edit icon}
-<Link to={`/people/${user.uid}/gift`}>
-<button onClick={() => 
-console.log(`edit gift with id ${user.uid}`)
-
-}>
-  <PlusSquareIcon />
-</button>
-</Link> */
+//{deleteItemDialog()}
