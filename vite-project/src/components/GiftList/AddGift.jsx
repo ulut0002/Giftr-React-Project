@@ -87,7 +87,9 @@ function AddGift() {
           </Button>
 
           <Link href={`/people/${uid}/gifts`}>
-            <Button>Cancel</Button>
+            <Button colorScheme="gray">
+              <Text>Cancel</Text>
+            </Button>
           </Link>
         </Flex>
       </Box>

@@ -3,7 +3,8 @@ import { AiFillGift } from 'react-icons/ai';
 import { EditIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Grid, GridItem } from '@chakra-ui/react';
+import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
+
 import {
   Button,
   ListItem,
@@ -24,7 +25,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 function GiftListItem({ gift, deleteGiftItem }) {
   const { uid } = useParams();
@@ -33,11 +34,53 @@ function GiftListItem({ gift, deleteGiftItem }) {
   const [message, setMessage] = useState('');
   const [deleted, setDeleted] = useState(false);
 
+  function deleteItemDialog() {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const cancelRef = useRef();
+
+    return (
+      <div>
+        <Button colorScheme="red" onClick={onOpen}>
+          <AiOutlineDelete />
+          <Text ml={1}>Delete</Text>
+        </Button>
+
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Delete Item?
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                Are you sure? You can't undo this action afterwards.
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button colorScheme="red" onClick={deleteGift} ml={3}>
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </div>
+    );
+  }
+
   function deleteGift() {
     //TODO: Alert and confirm with user
 
     const url = `${import.meta.env.VITE_BASEURL}/${uid}/gifts/${gift._id}`;
     //console.log('delete url', url);
+    console.log('delete is called');
 
     const request = new Request(url, {
       headers: {
@@ -90,20 +133,23 @@ function GiftListItem({ gift, deleteGiftItem }) {
         <GridItem colStart={2} colEnd={3} rowStart={1} rowEnd={4}>
           <Link to={`/people/${uid}/gifts/${gift._id}/edit`}>
             <Button colorScheme="blue">
-              <EditIcon />
+              <EditIcon /> <Text ml={1}>Edit</Text>
             </Button>
           </Link>
         </GridItem>
 
         <GridItem colStart={3} colEnd={4} rowStart={1} rowEnd={4}>
-          <Link to={`/people/${uid}/gifts`}>
-            <Button onClick={deleteGift} colorScheme="blue">
-              <AiOutlineDelete />
-            </Button>
-          </Link>
+          {deleteItemDialog()}
         </GridItem>
       </Grid>
     </ListItem>
   );
 }
 export default GiftListItem;
+
+// <Link to={`/people/${uid}/gifts`}>
+//             <Button onClick={showAlert1} colorScheme="red">
+//               <AiOutlineDelete />
+//               <Text ml={1}>Delete</Text>
+//             </Button>
+//           </Link>

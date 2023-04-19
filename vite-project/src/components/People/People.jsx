@@ -9,6 +9,7 @@ import {
   Box,
   Flex,
   Text,
+  list,
 } from '@chakra-ui/react';
 import PeopleList from './PeopleList';
 import { Heading, Button } from '@chakra-ui/react';
@@ -18,6 +19,28 @@ export default function People() {
   const [users, setUsers] = useState([]);
   const [token, setToken] = useToken();
   const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState(true);
+  const [listError, setListError] = useState('test error');
+
+  function compareDate(date1, date2) {
+    // -1, 0 , 1
+    const dateA = new Date(date1);
+    const dateB = new Date(date2);
+
+    const dateA1 = new Date(2023, dateA.getMonth() + 1, dateA.getDate());
+    const dateB1 = new Date(2023, dateB.getMonth() + 1, dateB.getDate());
+
+    return dateA1 - dateB1;
+  }
+
+  function deletePerson(id) {
+    const copy = [...users];
+    const idx = copy.findIndex((user) => user._id == id);
+    if (idx >= 0) {
+      copy.splice(idx, 1);
+    }
+    setUsers(copy);
+  }
 
   useEffect(() => {
     if (token) {
@@ -35,9 +58,12 @@ export default function People() {
         .then((users) => {
           //console.log(request)
           setLoading(false);
+          users.data.sort((userA, userB) => {
+            return compareDate(userA.dateOfBirth, userB.dateOfBirth);
+          });
 
           setUsers(users.data);
-          console.log(users);
+          // console.log(users);
         })
         .catch((error) => {
           setLoading(false);
@@ -82,10 +108,23 @@ export default function People() {
           </Center>
         </Box>
 
+        {listError && (
+          <Center>
+            <Text className="error-text">{listError}</Text>
+          </Center>
+        )}
+
         {users && users.length > 0 && (
           <UnorderedList className="List ">
             {users.length > 0 ? (
-              users.map((user) => <PeopleList key={user._id} user={user} />)
+              users.map((user) => (
+                <PeopleList
+                  key={user._id}
+                  user={user}
+                  deletePerson={deletePerson}
+                  setListError={setListError}
+                />
+              ))
             ) : (
               <li>No detail found</li>
             )}

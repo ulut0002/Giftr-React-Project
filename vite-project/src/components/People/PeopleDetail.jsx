@@ -1,13 +1,12 @@
-import React from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRef, useCallback } from 'react';
 import { useToken } from '../../context/LoginContext';
-import { DateTime } from 'luxon';
+// import { DateTime } from 'luxon';
+import { formatDateTime } from '../Util/Util';
 
-import { Link } from 'react-router-dom';
 import { AiOutlineSave, AiOutlineDelete, AiOutlineClose } from 'react-icons/ai';
 import {
   FormControl,
@@ -20,7 +19,9 @@ import {
   Text,
   Button,
   CircularProgress,
+  Link,
   CircularProgressLabel,
+  useDisclosure,
 } from '@chakra-ui/react';
 
 export default function PeopleDetail() {
@@ -35,6 +36,47 @@ export default function PeopleDetail() {
   const dobRef = useRef(null);
 
   const [name, setName] = useState('');
+
+  function deleteItemDialog() {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const cancelRef = useRef();
+
+    return (
+      <div>
+        <Button colorScheme="red" onClick={onOpen}>
+          <AiOutlineDelete />
+          <Text ml={1}>Delete</Text>
+        </Button>
+
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Delete Person?
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                Are you sure? You can't undo this action afterwards.
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button colorScheme="red" onClick={deleteUser} ml={3}>
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </div>
+    );
+  }
 
   function useHookWithRefCallback(nameRefParam, dobRefParam) {
     const ref = useRef(null);
@@ -70,11 +112,15 @@ export default function PeopleDetail() {
               //yyyy-MM-dd".
 
               nameRefParam.current.value = user.name;
-              console.log('date', user.dateOfBirth);
+              console.log('date', user.name, user.dateOfBirth);
 
               try {
-                const parsedDate = DateTime.fromISO(user.dateOfBirth);
-                const outputDate = parsedDate.toFormat('yyyy-MM-dd');
+                const outputDate = formatDateTime(user.dateOfBirth);
+                // const test = '2023-04-01T00:00:00.000Z';
+                // const parsedDate =
+                //   DateTime.fromISO(test).setZone('America/New_York');
+
+                // const outputDate = parsedDate.toFormat('yyyy-MM-dd');
                 dobRefParam.current.value = outputDate;
               } catch (error) {}
             })
@@ -208,19 +254,23 @@ export default function PeopleDetail() {
             <Input type="date" ref={dobRef} />
           </FormControl>
 
-          <Button className="add-btn" colorScheme="blue" onClick={saveUser}>
-            <AiOutlineSave />
-          </Button>
+          <Box className="button-group">
+            <Flex gap={2}>
+              <Button colorScheme="blue" onClick={saveUser}>
+                <AiOutlineSave />
+                <Text ml={1}>Save</Text>
+              </Button>
 
-          <Button className="add-btn" colorScheme="blue" onClick={deleteUser}>
-            <AiOutlineDelete />
-          </Button>
+              <Box>{deleteItemDialog()}</Box>
 
-          <Link to={`/people`}>
-            <Button className="add-btn" colorScheme="blue">
-              <AiOutlineClose />
-            </Button>
-          </Link>
+              <Link href="/people">
+                <Button>
+                  <AiOutlineClose />
+                  <Text ml={1}>Cancel</Text>
+                </Button>
+              </Link>
+            </Flex>
+          </Box>
         </ul>
       </div>
     </Container>
@@ -228,3 +278,8 @@ export default function PeopleDetail() {
 
   // rest of the component code
 }
+
+// <Button colorScheme="red" onClick={deleteUser}>
+// <AiOutlineDelete />
+// <Text ml={1}>Delete</Text>
+// </Button>

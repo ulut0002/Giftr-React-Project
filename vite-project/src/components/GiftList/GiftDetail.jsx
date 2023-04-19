@@ -186,15 +186,21 @@ export default function GiftDetail() {
             <Input type="text" ref={urlRef} />
           </FormControl>
 
-          <Button className="add-btn" colorScheme="blue" onClick={saveGift}>
-            <AiOutlineSave />
-          </Button>
+          <Box className="button-group">
+            <Flex gap={2}>
+              <Button className="add-btn" colorScheme="blue" onClick={saveGift}>
+                <AiOutlineSave />
+                <Text ml={1}>Save</Text>
+              </Button>
 
-          <Link to={`/people/${uid}/gifts`}>
-            <Button colorScheme="blue">
-              <AiOutlineClose />
-            </Button>
-          </Link>
+              <Link to={`/people/${uid}/gifts`}>
+                <Button colorScheme="gray">
+                  <AiOutlineClose />
+                  <Text ml={1}>Cancel</Text>
+                </Button>
+              </Link>
+            </Flex>
+          </Box>
         </ul>
       </div>
     </Container>

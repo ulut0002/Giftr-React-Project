@@ -8,6 +8,7 @@ import {
   HStack,
   Heading,
   Spacer,
+  Center,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useToken } from '../../context/LoginContext';
@@ -35,7 +36,10 @@ export default function Nav() {
     <Container className="container">
       <Box p={4} display={{ md: 'flex' }}>
         <Flex as="nav" alignItems="center">
-          <Heading as="h1">Giftr</Heading>
+          <Heading as="h1">
+            <Link href={'/'}>Giftr</Link>
+          </Heading>
+
           <Spacer />
           <HStack>
             {token ? (

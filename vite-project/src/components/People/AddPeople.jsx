@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { Box, Container, Flex, Link } from '@chakra-ui/react';
 import {
   FormControl,
@@ -81,8 +82,8 @@ export default function AddPeople() {
             Save
           </Button>
 
-          <Link href="/people">
-            <Button>Cancel</Button>
+          <Link href={'/people'}>
+            <Button colorScheme="gray">Cancel</Button>
           </Link>
         </Flex>
       </Box>
