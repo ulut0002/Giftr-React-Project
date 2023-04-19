@@ -77,6 +77,8 @@ const theme = {
         fontSize: { sm: fontSizes.sm.h3, md: fontSizes.md.h3 },
       },
 
+      '.add-btn': { marginRight: '1rem' },
+
       '.welcome-container': {
         marginTop: '2rem',
         paddingTop: '2rem',

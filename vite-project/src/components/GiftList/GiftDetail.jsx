@@ -8,9 +8,14 @@ import { Link } from 'react-router-dom';
 import { AiOutlineSave, AiOutlineDelete, AiOutlineClose } from 'react-icons/ai';
 import { useRef, useCallback } from 'react';
 import {
+  Container,
   FormControl,
   FormLabel,
   Input,
+  Center,
+  Box,
+  Flex,
+  Text,
   Button,
   CircularProgress,
   CircularProgressLabel,
@@ -36,6 +41,7 @@ export default function GiftDetail() {
       if (node) {
         // Check if a node is actually passed. Otherwise node would be null.
         // You can now do what you need to, addEventListeners, measure, etc.
+        console.log('XXXX', nameRefParam);
 
         if (token) {
           //sending request
@@ -52,7 +58,8 @@ export default function GiftDetail() {
           fetch(request)
             .then((res) => res.json())
             .then((users) => {
-              const user = users.data[0];
+              const user = users.data;
+              console.log('line 56', users);
               if (!user) throw new Error('custom error');
               node.value = user.name;
               //yyyy-MM-dd".
@@ -89,21 +96,25 @@ export default function GiftDetail() {
       );
       setLoading(true);
       fetch(request)
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error('no res');
+          return res.json();
+        })
         .then((users) => {
-          //console.log('test -users', users);
+          console.log('test -users', users);
           if (!users || !users.data) throw new Error('custom error');
           setGifts(users.data);
-
-          nameRef.current.value = users.data.name;
+          console.log('test -users', users.data);
+          /*  nameRef.current.value = users.data.name;
           storeRef.current.value = users.data.store;
           urlRef.current.value = users.data.url;
-
+ */
           setLoading(false);
           console.log('test -users-continue');
           //setGifts(users.data[0]);
         })
         .catch((isError) => {
+          console.log(isError);
           setLoading(false);
           setError('custom text');
         });
@@ -127,50 +138,65 @@ export default function GiftDetail() {
       }
     );
     fetch(request)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error('no res');
+        return res.json();
+      })
       .then((users) => {
-        //console.log('test -users', users);
+        console.log('test -users', users);
         if (!users || !users.data) throw new Error('custom error');
         setLoading(false);
         navigate(`/people/${uid}/gifts`);
       })
       .catch((isError) => {
+        console.log(isError);
         setLoading(false);
         setError('custom text');
       });
   }
 
   const [ref] = useHookWithRefCallback(nameRef, urlRef, storeRef);
+  if (isLoading) return <CircularProgress isIndeterminate color="green.300" />;
+
+  if (isError) return <div>{isError}there is an error</div>;
 
   return (
-    <div>
-      <h1>gift detail</h1>
-      <div ref={ref}></div>
+    <Container className="container sub-container">
+      <div className="people_container">
+        <Box className="title">
+          <Center>
+            <Text className="list-title" as="h3">
+              Gift Detail
+              <div ref={ref}></div>
+            </Text>
+          </Center>
+        </Box>
 
-      <ul className="giftList">
-        <FormControl>
-          <FormLabel>Name</FormLabel>
-          <Input type="text" ref={nameRef} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Store</FormLabel>
-          <Input type="text" ref={storeRef} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>URL</FormLabel>
-          <Input type="text" ref={urlRef} />
-        </FormControl>
+        <ul className="giftList">
+          <FormControl>
+            <FormLabel>Name</FormLabel>
+            <Input type="text" ref={nameRef} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Store</FormLabel>
+            <Input type="text" ref={storeRef} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>URL</FormLabel>
+            <Input type="text" ref={urlRef} />
+          </FormControl>
 
-        <button onClick={saveGift}>
-          <AiOutlineSave />
-        </button>
+          <Button className="add-btn" colorScheme="blue" onClick={saveGift}>
+            <AiOutlineSave />
+          </Button>
 
-        <Link to={`/people/${uid}/gifts`}>
-          <button>
-            <AiOutlineClose />
-          </button>
-        </Link>
-      </ul>
-    </div>
+          <Link to={`/people/${uid}/gifts`}>
+            <Button colorScheme="blue">
+              <AiOutlineClose />
+            </Button>
+          </Link>
+        </ul>
+      </div>
+    </Container>
   );
 }

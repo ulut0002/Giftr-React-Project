@@ -13,6 +13,11 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Center,
+  Box,
+  Container,
+  Flex,
+  Text,
   Button,
   CircularProgress,
   CircularProgressLabel,
@@ -101,7 +106,10 @@ export default function PeopleDetail() {
       setLoading(true);
 
       fetch(request)
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error('no res');
+          return res.json();
+        })
         .then((users) => {
           console.log(users);
 
@@ -179,33 +187,43 @@ export default function PeopleDetail() {
 
   if (isError) return <div>there is an error</div>;
   return (
-    <div className="people_container">
-      <h1>people detail</h1>
-      <div ref={ref}></div>
+    <Container className="container sub-container">
+      <div className="people_container">
+        <Box className="title">
+          <Center>
+            <Text className="list-title" as="h3">
+              People Detail
+              <div ref={ref}></div>
+            </Text>
+          </Center>
+        </Box>
 
-      <ul className="peopleList">
-        <FormControl>
-          <FormLabel>Name</FormLabel>
-          <Input type="text" ref={nameRef} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Date of Birth</FormLabel>
-          <Input type="date" ref={dobRef} />
-        </FormControl>
+        <ul className="peopleList">
+          <FormControl>
+            <FormLabel>Name</FormLabel>
+            <Input type="text" ref={nameRef} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Date of Birth</FormLabel>
+            <Input type="date" ref={dobRef} />
+          </FormControl>
 
-        <button onClick={saveUser}>
-          <AiOutlineSave />
-        </button>
-        <button onClick={deleteUser}>
-          <AiOutlineDelete />
-        </button>
-        <Link to={`/people`}>
-          <button>
-            <AiOutlineClose />
-          </button>
-        </Link>
-      </ul>
-    </div>
+          <Button className="add-btn" colorScheme="blue" onClick={saveUser}>
+            <AiOutlineSave />
+          </Button>
+
+          <Button className="add-btn" colorScheme="blue" onClick={deleteUser}>
+            <AiOutlineDelete />
+          </Button>
+
+          <Link to={`/people`}>
+            <Button className="add-btn" colorScheme="blue">
+              <AiOutlineClose />
+            </Button>
+          </Link>
+        </ul>
+      </div>
+    </Container>
   );
 
   // rest of the component code

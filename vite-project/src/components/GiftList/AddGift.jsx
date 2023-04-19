@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Link } from '@chakra-ui/react';
+import { Box, Container, Flex, Link } from '@chakra-ui/react';
 import {
   FormControl,
   FormLabel,
   Input,
   Button,
+  Text,
   CircularProgress,
   CircularProgressLabel,
 } from '@chakra-ui/react';
@@ -57,30 +58,41 @@ function AddGift() {
   }
 
   return (
-    <div>
-      {isLoading ? (
-        <CircularProgress isIndeterminate color="green.300" />
-      ) : null}
-      {isError ? <div className="error-text">{isError}</div> : null}
+    <Container className="container  sub-container">
+      {isLoading && <CircularProgress isIndeterminate color="green.300" />}
+
+      <Text as="h3" className="new-entry-header">
+        Add a new gift
+      </Text>
+
       <FormControl>
         <FormLabel>Name</FormLabel>
         <Input type="text" ref={nameRef} />
       </FormControl>
+
       <FormControl>
         <FormLabel>Store</FormLabel>
         <Input type="text" ref={storeRef} />
       </FormControl>
+
       <FormControl>
         <FormLabel>URL</FormLabel>
         <Input type="url" ref={urlRef} />
       </FormControl>
 
-      <Button onClick={addGift}>Save</Button>
+      <Box className="button-group">
+        <Flex gap={2}>
+          <Button onClick={addGift} colorScheme="telegram">
+            Save
+          </Button>
 
-      <Link href={`/people/${uid}/gifts`}>
-        <Button>Cancel</Button>
-      </Link>
-    </div>
+          <Link href={`/people/${uid}/gifts`}>
+            <Button>Cancel</Button>
+          </Link>
+        </Flex>
+      </Box>
+      {isError && <div className="error-text">{isError}</div>}
+    </Container>
   );
 }
 export default AddGift;

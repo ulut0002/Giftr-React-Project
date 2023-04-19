@@ -31,6 +31,7 @@ export default function PeopleList({ user }) {
           <GridItem colStart={1} colEnd={2} rowStart={1} rowEnd={2}>
             <Text className="people-name">{user.name}</Text>
           </GridItem>
+
           <GridItem colStart={1} colEnd={2} rowStart={2} rowEnd={3}>
             <Text className="people-dob">{dt.toLocaleString()}</Text>
           </GridItem>
@@ -46,6 +47,7 @@ export default function PeopleList({ user }) {
 
           <GridItem colStart={3} colEnd={4} rowStart={1} rowEnd={3}>
             {/* Gift Edit icon */}
+
             <Link to={`/people/${user._id}/gifts`}>
               <Button colorScheme="blue">
                 <AiFillGift />
