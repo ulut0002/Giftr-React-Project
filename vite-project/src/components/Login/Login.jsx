@@ -12,7 +12,7 @@ export default function Login() {
   //const [token, setToken] = useSessionStorage();
 
   function doLogin() {
-    const redirect = 'https://reactgiftr.netlify.app' + `login/`;
+    const redirect = 'https://reactgiftr.netlify.app/' + `login/`;
     const renderURL = `https://api-final-project.onrender.com/auth/google?redirect_url=${redirect}`;
     location.href = renderURL;
   }
