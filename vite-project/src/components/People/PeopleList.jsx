@@ -131,7 +131,9 @@ export default function PeopleList({ user, deletePerson, setListError }) {
             </Link>
           </GridItem>
 
-          <GridItem colStart={4} colEnd={5} rowStart={1} rowEnd={3}></GridItem>
+          <GridItem colStart={4} colEnd={5} rowStart={1} rowEnd={3}>
+            {deleteItemDialog()}
+          </GridItem>
         </Grid>
       </ListItem>
     );
@@ -139,4 +141,3 @@ export default function PeopleList({ user, deletePerson, setListError }) {
     return <div>Please login</div>;
   }
 }
-//{deleteItemDialog()}

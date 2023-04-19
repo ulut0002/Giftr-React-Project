@@ -31,47 +31,6 @@ export default function PeopleDetail() {
   const nameRef = useRef(null);
   const dobRef = useRef(null);
 
-  function deleteItemDialog() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const cancelRef = useRef();
-
-    return (
-      <div>
-        <Button colorScheme="red" onClick={onOpen}>
-          <AiOutlineDelete />
-          <Text ml={1}>Delete</Text>
-        </Button>
-
-        <AlertDialog
-          isOpen={isOpen}
-          leastDestructiveRef={cancelRef}
-          onClose={onClose}
-        >
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Delete Person?
-              </AlertDialogHeader>
-
-              <AlertDialogBody>
-                Are you sure? You can't undo this action afterwards.
-              </AlertDialogBody>
-
-              <AlertDialogFooter>
-                <Button ref={cancelRef} onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button colorScheme="red" onClick={deleteUser} ml={3}>
-                  Delete
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
-      </div>
-    );
-  }
-
   function useHookWithRefCallback(nameRefParam, dobRefParam) {
     const ref = useRef(null);
     const setRef = useCallback((node) => {
@@ -250,8 +209,3 @@ export default function PeopleDetail() {
     </Container>
   );
 }
-//<Box>{deleteItemDialog()}</Box>
-// <Button colorScheme="red" onClick={deleteUser}>
-// <AiOutlineDelete />
-// <Text ml={1}>Delete</Text>
-// </Button>
