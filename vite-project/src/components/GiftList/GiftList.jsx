@@ -45,7 +45,6 @@ export default function GiftList() {
           return res.json();
         })
         .then((gifts) => {
-          console.log(gifts);
           if (!gifts || !gifts.data)
             throw new Error('Fetch failed. Try again. ');
           setLoading(false);

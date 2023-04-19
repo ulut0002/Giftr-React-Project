@@ -3,6 +3,7 @@ import { EditIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { useToken } from '../../context/LoginContext';
 import { AiFillDelete, AiFillGift, AiOutlineDelete } from 'react-icons/ai';
+import { useParams } from 'react-router-dom';
 import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import { formatDateTime } from '../Util/Util';
 import {
@@ -16,7 +17,7 @@ import {
 import { Button, ListItem, Text } from '@chakra-ui/react';
 export default function PeopleList({ user, deletePerson, setListError }) {
   const [token, setToken] = useToken();
-
+  const { uid } = useParams();
   function deleteUser() {
     setListError(null);
     const request = new Request(

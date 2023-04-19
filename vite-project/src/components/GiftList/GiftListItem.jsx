@@ -99,11 +99,7 @@ function GiftListItem({ gift, deleteGiftItem }) {
   }
 
   function deleteGift() {
-    //TODO: Alert and confirm with user
-
     const url = `${import.meta.env.VITE_BASEURL}/${uid}/gifts/${gift._id}`;
-    //console.log('delete url', url);
-    console.log('delete is called');
 
     const request = new Request(url, {
       headers: {
@@ -121,8 +117,6 @@ function GiftListItem({ gift, deleteGiftItem }) {
         return res.json();
       })
       .then((users) => {
-        // window.location.reload();
-        //console.log('param', gift._id);
         deleteGiftItem(gift._id);
       })
       .catch((isError) => {

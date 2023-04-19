@@ -40,7 +40,6 @@ export default function GiftDetail() {
       if (node) {
         // Check if a node is actually passed. Otherwise node would be null.
         // You can now do what you need to, addEventListeners, measure, etc.
-        console.log('XXXX', nameRefParam);
 
         if (token) {
           //sending request
@@ -58,7 +57,7 @@ export default function GiftDetail() {
             .then((res) => res.json())
             .then((users) => {
               const user = users.data;
-              console.log('line 56', users);
+
               if (!user) throw new Error('custom error');
               node.value = user.name;
               //yyyy-MM-dd".
@@ -100,19 +99,12 @@ export default function GiftDetail() {
           return res.json();
         })
         .then((users) => {
-          console.log('test -users', users);
           if (!users || !users.data) throw new Error('custom error');
           setGifts(users.data);
-          /*  nameRef.current.value = users.data.name;
-          storeRef.current.value = users.data.store;
-          urlRef.current.value = users.data.url;
- */
+
           setLoading(false);
-          console.log('test -users-continue');
-          //setGifts(users.data[0]);
         })
         .catch((isError) => {
-          console.log(isError);
           setLoading(false);
           setError('custom text');
         });
@@ -141,13 +133,11 @@ export default function GiftDetail() {
         return res.json();
       })
       .then((users) => {
-        console.log('test -users', users);
         if (!users || !users.data) throw new Error('custom error');
         setLoading(false);
         navigate(`/people/${uid}/gifts`);
       })
       .catch((isError) => {
-        console.log(isError);
         setLoading(false);
         setError('custom text');
       });

@@ -104,8 +104,8 @@ export default function PeopleDetail() {
         })
         .catch((isError) => {
           setLoading(false);
-          console.log('isError', isError.message);
-          setError('custom text');
+
+          setError(import.meta.env.VITE_ERROR);
         });
     } else {
       setLoading(false);

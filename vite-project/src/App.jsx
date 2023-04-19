@@ -11,8 +11,6 @@ import AddGift from './components/GiftList/AddGift';
 import GiftDetail from './components/GiftList/GiftDetail';
 import NotFound from './components/NotFound/NotFound';
 function App() {
-  console.log(import.meta.env.VITE_SOME_KEY);
-  console.log(import.meta.env.VITE_DB_PASSWORD);
   return (
     <div className="App">
       <Nav />
