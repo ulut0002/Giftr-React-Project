@@ -27,7 +27,7 @@ export default function Nav() {
   function handleLoginClick() {
     console.log('login');
 
-    const redirect = window.location.href + `login/`;
+    const redirect = 'https://reactgiftr.netlify.app' + `login/`;
     const renderURL = `https://api-final-project.onrender.com/auth/google?redirect_url=${redirect}`;
     location.href = renderURL;
   }
