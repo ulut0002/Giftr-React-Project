@@ -11,14 +11,16 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useToken } from '../../context/LoginContext';
+import { useNavigate } from 'react-router-dom';
 export default function Nav() {
   const [token, setToken] = useToken();
+  const navigate = useNavigate();
 
   useEffect(() => {}, []);
 
   function handleLogoutClick() {
-    console.log('logout');
     setToken(null);
+    navigate('/');
   }
 
   function handleLoginClick() {

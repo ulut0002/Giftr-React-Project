@@ -2,7 +2,14 @@ import React from 'react';
 import { Outlet, useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useToken } from '../../context/LoginContext';
-import { Container, UnorderedList, Center, Box } from '@chakra-ui/react';
+import {
+  Container,
+  UnorderedList,
+  Center,
+  Box,
+  Flex,
+  Text,
+} from '@chakra-ui/react';
 import PeopleList from './PeopleList';
 import { Heading, Button } from '@chakra-ui/react';
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
@@ -50,32 +57,46 @@ export default function People() {
 
   if (token) {
     if (isLoading) {
-      return <CircularProgress isIndeterminate color="green.300" />;
+      return (
+        <Container className="container sub-container">
+          <Flex alignItems="center" justifyContent="center">
+            <CircularProgress isIndeterminate color="green.300" />
+          </Flex>
+        </Container>
+      );
     }
 
     return (
-      <Container className="container">
+      <Container className="container sub-container">
         <Box className="title">
           <Center>
-            <Heading className="heading" as="h3">
-              User List
-            </Heading>
+            <Text className="list-title" as="h3">
+              People List
+            </Text>
           </Center>
 
           <Center>
             <Link className="add-btn " to={`/people/add`}>
-              <Button colorScheme="telegram">Add</Button>
+              <Button colorScheme="telegram">Add Person</Button>
             </Link>
           </Center>
         </Box>
 
-        <UnorderedList className="List ">
-          {users.length > 0 ? (
-            users.map((user) => <PeopleList key={user._id} user={user} />)
-          ) : (
-            <li>No detail found</li>
-          )}
-        </UnorderedList>
+        {users && users.length > 0 && (
+          <UnorderedList className="List ">
+            {users.length > 0 ? (
+              users.map((user) => <PeopleList key={user._id} user={user} />)
+            ) : (
+              <li>No detail found</li>
+            )}
+          </UnorderedList>
+        )}
+
+        {users.length === 0 && (
+          <Center>
+            <Text className="empty-list-warning">The list is empty.</Text>
+          </Center>
+        )}
       </Container>
     );
   } else {

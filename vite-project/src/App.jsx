@@ -13,6 +13,7 @@ import './App.css';
 import Nav from './components/Nav/Nav';
 import AddGift from './components/GiftList/AddGift';
 import GiftDetail from './components/GiftList/GiftDetail';
+import NotFound from './components/NotFound/NotFound';
 function App() {
   console.log(import.meta.env.VITE_SOME_KEY);
   console.log(import.meta.env.VITE_DB_PASSWORD);
@@ -32,6 +33,7 @@ function App() {
           path="/people/:uid/gifts/:giftId/edit"
           element={<GiftDetail />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

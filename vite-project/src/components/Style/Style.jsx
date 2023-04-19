@@ -1,9 +1,29 @@
 import { extendTheme } from '@chakra-ui/react';
 
+const fontSizes = {
+  sm: {
+    h1: '2.488rem',
+    h2: '2.074rem',
+    h3: '1.728rem',
+    h4: '1.44rem',
+    h5: '1.2rem',
+    h6: '1rem',
+    small: '0.833rem',
+  },
+  md: {
+    h1: '3.052rem',
+    h2: '2.441rem',
+    h3: '1.953rem',
+    h4: '1.563rem',
+    h5: '1.25rem',
+    h6: '1rem',
+    small: '0.8rem',
+  },
+};
+
 const breakpoints = {
   sm: '30rem',
   md: '45rem',
-  base: '0',
 };
 
 // const theme = {
@@ -20,7 +40,8 @@ const breakpoints = {
 //   },
 // };
 const primary = { light: 'gray.10', dark: 'gray.700' };
-const secondary = { light: 'gray.50', dark: 'gray.700' };
+const secondary = { light: 'gray.50', dark: 'gray.700', highlight: 'purple' };
+const alert = { red: 'red.500' };
 
 const theme = {
   breakpoints: breakpoints,
@@ -44,6 +65,21 @@ const theme = {
         bg: primary.light,
         color: primary.dark,
         w: '100%',
+      },
+
+      '.welcome': {
+        fontSize: { sm: fontSizes.sm.h1, md: fontSizes.md.h1 },
+        color: secondary.highlight,
+        fontWeight: 'bold',
+      },
+
+      '.welcome-subtitle': {
+        fontSize: { sm: fontSizes.sm.h3, md: fontSizes.md.h3 },
+      },
+
+      '.welcome-container': {
+        marginTop: '2rem',
+        paddingTop: '2rem',
       },
 
       h3: {
@@ -75,12 +111,43 @@ const theme = {
         border: '2px solid black',
         bg: 'gray.20',
         borderRadius: 'xl',
+        padding: '2rem',
       },
 
+      '.list-title': {
+        fontSize: { sm: fontSizes.sm.h2, md: fontSizes.md.h2 },
+        fontWeight: 'bold',
+      },
+
+      '.new-entry-header': {
+        fontSize: { sm: fontSizes.sm.h3, md: fontSizes.md.h3 },
+      },
+
+      '.empty-list-warning': {
+        fontSize: { sm: fontSizes.sm.h5, md: fontSizes.md.h5 },
+        fontWeight: 'bold',
+        marginTop: '2rem',
+      },
+
+      '.button-group': {
+        marginTop: '1rem',
+      },
       //responsive only
       '.container': {
         minWidth: { sm: '100%', md: '50%' },
         padding: '0rem',
+      },
+
+      '.sub-container': {
+        marginTop: '2rem',
+      },
+
+      '.error-text': {
+        paddingTop: '2rem',
+        textAlign: 'center',
+        color: alert.red,
+        fontSize: { sm: fontSizes.sm.h5, md: fontSizes.md.h5 },
+        fontWeight: 'bold',
       },
 
       footer: {
