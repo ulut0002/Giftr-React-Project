@@ -1,10 +1,9 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useToken } from '../../context/LoginContext';
-import { Link } from 'react-router-dom';
+
 import { AiOutlineSave, AiOutlineDelete, AiOutlineClose } from 'react-icons/ai';
 import { useRef, useCallback } from 'react';
 import {
@@ -18,7 +17,7 @@ import {
   Text,
   Button,
   CircularProgress,
-  CircularProgressLabel,
+  Link,
 } from '@chakra-ui/react';
 export default function GiftDetail() {
   const { uid, giftId } = useParams();
@@ -104,7 +103,6 @@ export default function GiftDetail() {
           console.log('test -users', users);
           if (!users || !users.data) throw new Error('custom error');
           setGifts(users.data);
-          console.log('test -users', users.data);
           /*  nameRef.current.value = users.data.name;
           storeRef.current.value = users.data.store;
           urlRef.current.value = users.data.url;
@@ -156,52 +154,60 @@ export default function GiftDetail() {
   }
 
   const [ref] = useHookWithRefCallback(nameRef, urlRef, storeRef);
-  if (isLoading) return <CircularProgress isIndeterminate color="green.300" />;
+  if (isLoading)
+    return (
+      <Flex alignContent="center" justify="center">
+        <CircularProgress isIndeterminate color="green.300" />
+      </Flex>
+    );
 
-  if (isError) return <div>{isError}there is an error</div>;
+  if (isError)
+    return (
+      <Center>
+        <Text>{isError ? isError : 'there is an error'}</Text>
+      </Center>
+    );
 
   return (
     <Container className="container sub-container">
+      <div ref={ref}></div>
       <div className="people_container">
         <Box className="title">
           <Center>
             <Text className="list-title" as="h3">
-              Gift Detail
-              <div ref={ref}></div>
+              Gift: {gifts.name}
             </Text>
           </Center>
         </Box>
 
-        <ul className="giftList">
-          <FormControl>
-            <FormLabel>Name</FormLabel>
-            <Input type="text" ref={nameRef} />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Store</FormLabel>
-            <Input type="text" ref={storeRef} />
-          </FormControl>
-          <FormControl>
-            <FormLabel>URL</FormLabel>
-            <Input type="text" ref={urlRef} />
-          </FormControl>
+        <FormControl>
+          <FormLabel>Name</FormLabel>
+          <Input type="text" ref={nameRef} />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Store</FormLabel>
+          <Input type="text" ref={storeRef} />
+        </FormControl>
+        <FormControl>
+          <FormLabel>URL</FormLabel>
+          <Input type="text" ref={urlRef} />
+        </FormControl>
 
-          <Box className="button-group">
-            <Flex gap={2}>
-              <Button className="add-btn" colorScheme="blue" onClick={saveGift}>
-                <AiOutlineSave />
-                <Text ml={1}>Save</Text>
+        <Box className="button-group">
+          <Flex gap={2}>
+            <Button className="add-btn" colorScheme="blue" onClick={saveGift}>
+              <AiOutlineSave />
+              <Text ml={1}>Update</Text>
+            </Button>
+
+            <Link to={`/people/${uid}/gifts`}>
+              <Button colorScheme="gray">
+                <AiOutlineClose />
+                <Text ml={1}>Cancel</Text>
               </Button>
-
-              <Link to={`/people/${uid}/gifts`}>
-                <Button colorScheme="gray">
-                  <AiOutlineClose />
-                  <Text ml={1}>Cancel</Text>
-                </Button>
-              </Link>
-            </Flex>
-          </Box>
-        </ul>
+            </Link>
+          </Flex>
+        </Box>
       </div>
     </Container>
   );

@@ -1,23 +1,20 @@
-import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import useSessionStorage from '../../hooks/UseSessionStorage';
 import { useEffect } from 'react';
 import { useToken } from '../../context/LoginContext';
+import { Button, Center, Container, Text } from '@chakra-ui/react';
 
 export default function Login() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [token, setToken] = useToken();
-  console.log(token);
-  //const [token, setToken] = useSessionStorage();
 
   function doLogin() {
-    const redirect = 'https://reactgiftr.netlify.app/' + `login/`;
-    const renderURL = `https://api-final-project.onrender.com/auth/google?redirect_url=${redirect}`;
+    const renderURL = `${import.meta.env.VITE_AUTH_URL}=${
+      import.meta.env.VITE_REDIRECT_URL
+    }`;
     location.href = renderURL;
   }
 
-  //initial
   useEffect(() => {
     const getToken = searchParams.get('token');
     if (getToken) {
@@ -30,8 +27,16 @@ export default function Login() {
   }, []);
 
   return (
-    <div>
-      <button onClick={doLogin}>Login</button>
-    </div>
+    <Container>
+      <Center>
+        <Text>You are not logged in.</Text>{' '}
+      </Center>
+
+      <Center>
+        <Button colorScheme="teal" onClick={doLogin}>
+          Click to Login
+        </Button>
+      </Center>
+    </Container>
   );
 }

@@ -34,6 +34,22 @@ function GiftListItem({ gift, deleteGiftItem }) {
   const [message, setMessage] = useState('');
   const [deleted, setDeleted] = useState(false);
 
+  function parseTextToURL(value) {
+    if (!value) return '';
+    if (typeof value !== 'string') return '';
+    let lo_case = value.toLowerCase();
+    if (!lo_case.startsWith('http')) {
+      lo_case = 'https://' + lo_case;
+    }
+    try {
+      if (!lo_case.includes('.')) throw Error('');
+      const url = new URL(lo_case);
+      return { value: url.href, validURL: true };
+    } catch (error) {
+      return { value: value, validURL: false };
+    }
+  }
+
   function deleteItemDialog() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef();
@@ -53,7 +69,7 @@ function GiftListItem({ gift, deleteGiftItem }) {
           <AlertDialogOverlay>
             <AlertDialogContent>
               <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Delete Item?
+                Delete Item {gift.name}?
               </AlertDialogHeader>
 
               <AlertDialogBody>
@@ -64,7 +80,14 @@ function GiftListItem({ gift, deleteGiftItem }) {
                 <Button ref={cancelRef} onClick={onClose}>
                   Cancel
                 </Button>
-                <Button colorScheme="red" onClick={deleteGift} ml={3}>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    onClose();
+                    deleteGift();
+                  }}
+                  ml={3}
+                >
                   Delete
                 </Button>
               </AlertDialogFooter>
@@ -111,6 +134,8 @@ function GiftListItem({ gift, deleteGiftItem }) {
     return null;
   }
 
+  const formattedUrl = parseTextToURL(gift.url);
+
   return (
     <ListItem className="person-id">
       <Grid
@@ -123,14 +148,26 @@ function GiftListItem({ gift, deleteGiftItem }) {
         </GridItem>
 
         <GridItem colStart={1} colEnd={2} rowStart={2} rowEnd={3}>
-          <Text className="gift-url">{gift.url}</Text>
+          {formattedUrl.validURL ? (
+            <Link to={formattedUrl.value} target="blank">
+              {gift.url}
+            </Link>
+          ) : (
+            <Text className="gift-url">{gift.url}</Text>
+          )}
         </GridItem>
 
         <GridItem colStart={1} colEnd={2} rowStart={3} rowEnd={4}>
           <Text className="gift-store">{gift.store}</Text>
         </GridItem>
 
-        <GridItem colStart={2} colEnd={3} rowStart={1} rowEnd={4}>
+        <GridItem
+          colStart={2}
+          colEnd={3}
+          rowStart={1}
+          rowEnd={4}
+          alignSelf="center"
+        >
           <Link to={`/people/${uid}/gifts/${gift._id}/edit`}>
             <Button colorScheme="blue">
               <EditIcon /> <Text ml={1}>Edit</Text>
@@ -138,7 +175,13 @@ function GiftListItem({ gift, deleteGiftItem }) {
           </Link>
         </GridItem>
 
-        <GridItem colStart={3} colEnd={4} rowStart={1} rowEnd={4}>
+        <GridItem
+          colStart={3}
+          colEnd={4}
+          rowStart={1}
+          rowEnd={4}
+          alignSelf="center"
+        >
           {deleteItemDialog()}
         </GridItem>
       </Grid>
@@ -146,10 +189,3 @@ function GiftListItem({ gift, deleteGiftItem }) {
   );
 }
 export default GiftListItem;
-
-// <Link to={`/people/${uid}/gifts`}>
-//             <Button onClick={showAlert1} colorScheme="red">
-//               <AiOutlineDelete />
-//               <Text ml={1}>Delete</Text>
-//             </Button>
-//           </Link>

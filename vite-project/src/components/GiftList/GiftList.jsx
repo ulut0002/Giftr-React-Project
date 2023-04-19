@@ -76,7 +76,13 @@ export default function GiftList() {
   }
 
   if (isLoading) {
-    return <CircularProgress isIndeterminate color="green.300" />;
+    return (
+      <Container className="container sub-container">
+        <Flex justifyContent="center">
+          <CircularProgress isIndeterminate color="green.300" />
+        </Flex>
+      </Container>
+    );
   }
 
   if (isError) {

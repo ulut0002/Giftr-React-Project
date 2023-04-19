@@ -20,7 +20,7 @@ export default function PeopleList({ user, deletePerson, setListError }) {
   function deleteUser() {
     setListError(null);
     const request = new Request(
-      `https://api-final-project.onrender.com/api/people/${user._id}`,
+      `${import.meta.env.VITE_BASEURL}/${uid}/${user._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -114,7 +114,13 @@ export default function PeopleList({ user, deletePerson, setListError }) {
             </Text>
           </GridItem>
 
-          <GridItem colStart={2} colEnd={3} rowStart={1} rowEnd={3}>
+          <GridItem
+            colStart={2}
+            colEnd={3}
+            rowStart={1}
+            rowEnd={3}
+            alignSelf="center"
+          >
             <Link to={`/people/${user._id}/edit`}>
               <Button colorScheme="blue">
                 <EditIcon />
@@ -123,7 +129,13 @@ export default function PeopleList({ user, deletePerson, setListError }) {
             </Link>
           </GridItem>
 
-          <GridItem colStart={3} colEnd={4} rowStart={1} rowEnd={3}>
+          <GridItem
+            colStart={3}
+            colEnd={4}
+            rowStart={1}
+            rowEnd={3}
+            alignSelf="center"
+          >
             <Link to={`/people/${user._id}/gifts`}>
               <Button colorScheme="blue">
                 <AiFillGift /> <Text ml={1}>Gift List</Text>
@@ -131,7 +143,13 @@ export default function PeopleList({ user, deletePerson, setListError }) {
             </Link>
           </GridItem>
 
-          <GridItem colStart={4} colEnd={5} rowStart={1} rowEnd={3}>
+          <GridItem
+            colStart={4}
+            colEnd={5}
+            rowStart={1}
+            rowEnd={3}
+            alignSelf="center"
+          >
             {deleteItemDialog()}
           </GridItem>
         </Grid>

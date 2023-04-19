@@ -59,7 +59,11 @@ function AddGift() {
 
   return (
     <Container className="container  sub-container">
-      {isLoading && <CircularProgress isIndeterminate color="green.300" />}
+      {isLoading && (
+        <Flex alignContent="center" justify="center">
+          <CircularProgress isIndeterminate color="green.300" />
+        </Flex>
+      )}
 
       <Text as="h3" className="new-entry-header">
         Add a new gift

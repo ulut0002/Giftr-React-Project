@@ -1,5 +1,4 @@
-import React from 'react';
-import { Outlet, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useToken } from '../../context/LoginContext';
 import {
@@ -9,10 +8,10 @@ import {
   Box,
   Flex,
   Text,
-  list,
+  ListItem,
 } from '@chakra-ui/react';
 import PeopleList from './PeopleList';
-import { Heading, Button } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 export default function People() {
   const { uid } = useParams();
@@ -20,17 +19,19 @@ export default function People() {
   const [token, setToken] = useToken();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(true);
-  const [listError, setListError] = useState('test error');
+  const [listError, setListError] = useState('');
 
   function compareDate(date1, date2) {
-    // -1, 0 , 1
-    const dateA = new Date(date1);
-    const dateB = new Date(date2);
+    try {
+      const dateA = new Date(date1);
+      const dateB = new Date(date2);
 
-    const dateA1 = new Date(2023, dateA.getMonth() + 1, dateA.getDate());
-    const dateB1 = new Date(2023, dateB.getMonth() + 1, dateB.getDate());
-
-    return dateA1 - dateB1;
+      const dateA1 = new Date(2023, dateA.getMonth() + 1, dateA.getDate());
+      const dateB1 = new Date(2023, dateB.getMonth() + 1, dateB.getDate());
+      return dateA1 - dateB1;
+    } catch (error) {
+      return 0;
+    }
   }
 
   function deletePerson(id) {
@@ -44,7 +45,6 @@ export default function People() {
 
   useEffect(() => {
     if (token) {
-      //sending request
       const request = new Request(`${import.meta.env.VITE_BASEURL}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -54,16 +54,17 @@ export default function People() {
       });
 
       fetch(request)
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error('');
+          return res.json();
+        })
         .then((users) => {
-          //console.log(request)
           setLoading(false);
           users.data.sort((userA, userB) => {
             return compareDate(userA.dateOfBirth, userB.dateOfBirth);
           });
 
           setUsers(users.data);
-          // console.log(users);
         })
         .catch((error) => {
           setLoading(false);
@@ -75,11 +76,6 @@ export default function People() {
         });
     }
   }, []);
-
-  //const user = users.find((u) => u.uid === uid);
-  /*  const listItem = users.map((user) => (
-    <PeopleList key={user.uid} user={user} />
-  )); */
 
   if (token) {
     if (isLoading) {
@@ -126,7 +122,9 @@ export default function People() {
                 />
               ))
             ) : (
-              <li>No detail found</li>
+              <ListItem>
+                <Text>No detail found</Text>
+              </ListItem>
             )}
           </UnorderedList>
         )}
@@ -139,6 +137,14 @@ export default function People() {
       </Container>
     );
   } else {
-    return <div>Please login</div>;
+    return (
+      <Container>
+        <Center>
+          <Text as="h2" className="empty-list-warning">
+            Please login to view list of people
+          </Text>
+        </Center>
+      </Container>
+    );
   }
 }

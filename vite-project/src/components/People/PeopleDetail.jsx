@@ -107,6 +107,9 @@ export default function PeopleDetail() {
           console.log('isError', isError.message);
           setError('custom text');
         });
+    } else {
+      setLoading(false);
+      setError('Sorry. You have to login to view this page');
     }
   }, []);
   function saveUser() {
@@ -140,7 +143,7 @@ export default function PeopleDetail() {
   }
   function deleteUser() {
     const request = new Request(
-      `https://api-final-project.onrender.com/api/people/${users._id}`,
+      `${import.meta.env.VITE_BASEURL}/${uid}/${users._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -164,47 +167,61 @@ export default function PeopleDetail() {
 
   const [ref] = useHookWithRefCallback(nameRef, dobRef);
 
-  if (isLoading) return <CircularProgress isIndeterminate color="green.300" />;
+  if (isLoading)
+    return (
+      <Container className="container sub-container">
+        <Flex justifyContent="center">
+          <CircularProgress isIndeterminate color="green.300" />
+        </Flex>
+      </Container>
+    );
 
-  if (isError) return <div>there is an error</div>;
+  if (isError)
+    return (
+      <Container className="container sub-container">
+        <Center>
+          <Text className="error-text">
+            {isError ? isError : 'You cannot view this page without logging in'}
+          </Text>
+        </Center>
+      </Container>
+    );
   return (
     <Container className="container sub-container">
       <div className="people_container">
         <Box className="title">
           <Center>
             <Text className="list-title" as="h3">
-              People Detail
+              {users.name}
               <div ref={ref}></div>
             </Text>
           </Center>
         </Box>
 
-        <ul className="peopleList">
-          <FormControl>
-            <FormLabel>Name</FormLabel>
-            <Input type="text" ref={nameRef} />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Date of Birth</FormLabel>
-            <Input type="date" ref={dobRef} />
-          </FormControl>
+        <FormControl mt={5}>
+          <FormLabel>Name</FormLabel>
+          <Input type="text" ref={nameRef} />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Date of Birth</FormLabel>
+          <Input type="date" ref={dobRef} />
+        </FormControl>
 
-          <Box className="button-group">
-            <Flex gap={2}>
-              <Button colorScheme="blue" onClick={saveUser}>
-                <AiOutlineSave />
-                <Text ml={1}>Save</Text>
+        <Box className="button-group">
+          <Flex gap={2}>
+            <Button colorScheme="blue" onClick={saveUser}>
+              <AiOutlineSave />
+              <Text ml={1}>Save</Text>
+            </Button>
+
+            <Link href="/people">
+              <Button>
+                <AiOutlineClose />
+                <Text ml={1}>Cancel</Text>
               </Button>
-
-              <Link href="/people">
-                <Button>
-                  <AiOutlineClose />
-                  <Text ml={1}>Cancel</Text>
-                </Button>
-              </Link>
-            </Flex>
-          </Box>
-        </ul>
+            </Link>
+          </Flex>
+        </Box>
       </div>
     </Container>
   );

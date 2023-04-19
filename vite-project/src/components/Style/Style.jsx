@@ -90,7 +90,8 @@ const theme = {
 
       '.person-id': {
         listStyleType: 'none',
-        padding: '0rem',
+        padding: '1rem',
+        bg: 'gray.50',
       },
 
       '.people-name': {
@@ -98,15 +99,28 @@ const theme = {
         padding: '0rem',
       },
       '.people-dob': {
-        marginBottom: '2rem',
+        padding: '0rem',
+      },
+
+      '.gift-name': {
+        fontSize: '1.5rem',
+        padding: '0rem',
+      },
+      '.gift-url': {
+        padding: '0rem',
+      },
+      '.gift-store': {
         padding: '0rem',
       },
 
       '.List': {
-        bg: 'gray.50',
         listStyleType: 'none',
+        margin: '0',
         marginTop: '1rem',
         padding: '0rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
       },
 
       '.title': {
@@ -138,9 +152,11 @@ const theme = {
       '.container': {
         minWidth: { sm: '100%', md: '50%' },
         padding: '0rem',
+        margin: '0',
       },
 
       '.sub-container': {
+        margin: '0',
         marginTop: '2rem',
       },
 

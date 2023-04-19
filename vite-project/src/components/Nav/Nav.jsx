@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import './Nav.css';
-import { Box, Image, Link, Text } from '@chakra-ui/react';
+import { Box, Link } from '@chakra-ui/react';
 import {
   Button,
   Container,
@@ -8,16 +6,13 @@ import {
   HStack,
   Heading,
   Spacer,
-  Center,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+
 import { useToken } from '../../context/LoginContext';
 import { useNavigate } from 'react-router-dom';
 export default function Nav() {
   const [token, setToken] = useToken();
   const navigate = useNavigate();
-
-  useEffect(() => {}, []);
 
   function handleLogoutClick() {
     setToken(null);
@@ -25,15 +20,14 @@ export default function Nav() {
   }
 
   function handleLoginClick() {
-    console.log('login');
-
-    const redirect = 'https://reactgiftr.netlify.app/' + `login/`;
-    const renderURL = `https://api-final-project.onrender.com/auth/google?redirect_url=${redirect}`;
+    const renderURL = `${import.meta.env.VITE_AUTH_URL}=${
+      import.meta.env.VITE_REDIRECT_URL
+    }`;
     location.href = renderURL;
   }
 
   return (
-    <Container className="container">
+    <Container className="container ">
       <Box p={4} display={{ md: 'flex' }}>
         <Flex as="nav" alignItems="center">
           <Heading as="h1">
