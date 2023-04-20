@@ -47,6 +47,12 @@ export default function Nav() {
             )}
           </HStack>
         </Flex>
+
+        {token && (
+          <Button>
+            <Link href={'/'}>Home</Link>
+          </Button>
+        )}
       </Box>
     </Container>
   );
