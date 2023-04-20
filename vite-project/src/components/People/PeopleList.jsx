@@ -21,13 +21,17 @@ export default function PeopleList({ user, deletePerson, setListError }) {
 
   function deleteUser() {
     setListError(null);
-    const request = new Request(`${import.meta.env.VITE_BASEURL}/${user._id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      method: 'DELETE',
-    });
+    const request = new Request(
+      `${import.meta.env.VITE_BASEURL}/${user._id}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'DELETE',
+      }
+    );
 
     fetch(request)
       .then((res) => {

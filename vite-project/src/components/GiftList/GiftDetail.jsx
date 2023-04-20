@@ -190,7 +190,7 @@ export default function GiftDetail() {
               <Text ml={1}>Update</Text>
             </Button>
 
-            <Link to={`/people/${uid}/gifts`}>
+            <Link href={`/people/${uid}/gifts`}>
               <Button colorScheme="gray">
                 <AiOutlineClose />
                 <Text ml={1}>Cancel</Text>
